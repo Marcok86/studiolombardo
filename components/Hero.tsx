@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { HERO, CONTACT } from "@/lib/content";
+import { HERO, CONTACT, MANIFESTO } from "@/lib/content";
 
 const primaryPhone = CONTACT.phones[0];
 const clamp = (v: number) => Math.min(Math.max(v, 0), 1);
@@ -14,6 +14,7 @@ export default function Hero() {
   const centraleRef = useRef<HTMLDivElement>(null);
   const focusRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const claimRef = useRef<HTMLDivElement>(null);
   const cueRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -41,8 +42,12 @@ export default function Hero() {
         focusRef.current.style.transform = `translate3d(0, ${p * 40}px, 0) scale(${1.05 + p * 0.06})`;
       }
       if (contentRef.current) {
-        contentRef.current.style.opacity = String(1 - clamp((p - 0.45) / 0.4));
+        contentRef.current.style.opacity = String(1 - clamp((p - 0.32) / 0.26));
         contentRef.current.style.transform = `translate3d(0, ${p * -60}px, 0)`;
+      }
+      if (claimRef.current) {
+        claimRef.current.style.opacity = String(clamp((p - 0.5) / 0.32));
+        claimRef.current.style.transform = `translate3d(0, ${(1 - p) * 28}px, 0)`;
       }
       if (cueRef.current) cueRef.current.style.opacity = String(1 - clamp(p / 0.15));
     };
@@ -125,6 +130,10 @@ export default function Hero() {
               Oppure chiamaci: <a href={primaryPhone.href}>{primaryPhone.label}</a>
             </p>
           </div>
+        </div>
+
+        <div className="hero__claim" ref={claimRef} aria-hidden>
+          <p className="hero__claim-inner">{MANIFESTO.claim}</p>
         </div>
 
         <div className="hero__cue" ref={cueRef} aria-hidden>
