@@ -24,6 +24,13 @@ export const HERO = {
   ctaSecondary: { label: "Scopri i servizi", href: "#servizi" },
 };
 
+export const MANIFESTO = {
+  claim: "Your Technical Partner in Development.",
+  text:
+    "Dal sopralluogo alla consegna, un solo interlocutore tecnico che traduce ogni idea in un progetto concreto, autorizzato e di valore.",
+  cta: { label: "Richiedi consulenza", href: "#contatti" },
+};
+
 export const ABOUT = {
   eyebrow: "Chi Siamo",
   title: "Un percorso chiaro,",
