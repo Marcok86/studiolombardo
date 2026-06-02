@@ -49,7 +49,16 @@ export default function Manifesto() {
       <div className="manifesto__scrim" aria-hidden />
       <div className="container manifesto__inner">
         <div className="manifesto__content">
-          <p className="manifesto__claim">{MANIFESTO.claim}</p>
+          <div className="emblem">
+            <span className="emblem__ring emblem__ring--outer" aria-hidden />
+            <span className="emblem__ring emblem__ring--inner" aria-hidden />
+            <span className="emblem__glow" aria-hidden />
+            <blockquote className="emblem__quote">
+              <span className="emblem__mark" aria-hidden>“</span>
+              {MANIFESTO.quote}
+              <cite>{MANIFESTO.author}</cite>
+            </blockquote>
+          </div>
           <p className="manifesto__text">{MANIFESTO.text}</p>
           <a className="btn btn--primary" href={MANIFESTO.cta.href}>
             {MANIFESTO.cta.label}
