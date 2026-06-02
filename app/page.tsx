@@ -1,11 +1,29 @@
+import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import Sections from "@/components/Sections";
+import Stats from "@/components/Stats";
+import Targets from "@/components/Targets";
+import Services from "@/components/Services";
+import About from "@/components/About";
+import Team from "@/components/Team";
+import Contact from "@/components/Contact";
+import Footer from "@/components/Footer";
+import MobileCta from "@/components/MobileCta";
 
 export default function Home() {
   return (
-    <main>
-      <Hero />
-      <Sections />
-    </main>
+    <>
+      <Navbar />
+      <main>
+        <Hero />
+        <Stats />
+        <Targets />
+        <Services />
+        <About />
+        <Team />
+        <Contact />
+      </main>
+      <Footer />
+      <MobileCta />
+    </>
   );
 }

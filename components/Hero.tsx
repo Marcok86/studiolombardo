@@ -1,301 +1,40 @@
-"use client";
-
-import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { HERO_LAYERS, PHASES } from "@/lib/hero-data";
-import {
-  useDeviceMode,
-  easeInOut,
-  easeOut,
-  lerp,
-  clamp,
-  type DeviceMode,
-} from "@/lib/useDeviceMode";
+import { HERO, CONTACT } from "@/lib/content";
+
+const primaryPhone = CONTACT.phones[0];
 
 export default function Hero() {
-  const mode = useDeviceMode();
-  const heroRef = useRef<HTMLDivElement>(null);
-  const layerRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const blockRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const progRef = useRef<HTMLDivElement>(null);
-  const hintRef = useRef<HTMLDivElement>(null);
-  const ruleRef = useRef<HTMLDivElement>(null);
-  const decoRef = useRef<SVGSVGElement>(null);
-  const dc1Ref = useRef<SVGCircleElement>(null);
-  const dc2Ref = useRef<SVGCircleElement>(null);
-
-  useEffect(() => {
-    if (!mode) return;
-    const hero = heroRef.current;
-    if (!hero) return;
-
-    let target = 0;
-    let current = 0;
-    let mx = 0,
-      my = 0,
-      cmx = 0,
-      cmy = 0;
-    let raf = 0;
-
-    const computeTarget = () => {
-      const r = hero.getBoundingClientRect();
-      const total = hero.offsetHeight - window.innerHeight;
-      target = clamp(-r.top / total, 0, 1);
-    };
-    const onMouse = (e: MouseEvent) => {
-      mx = e.clientX / window.innerWidth - 0.5;
-      my = e.clientY / window.innerHeight - 0.5;
-    };
-
-    window.addEventListener("scroll", computeTarget, { passive: true });
-    window.addEventListener("resize", computeTarget);
-    computeTarget();
-
-    const applyPhases = (p: number) => {
-      blockRefs.current.forEach((b, i) => {
-        if (!b) return;
-        const ph = PHASES[i];
-        let op: number, ty: number;
-        if (p < ph.in) {
-          op = 0;
-          ty = 30;
-        } else if (p < ph.full) {
-          const k = easeOut((p - ph.in) / (ph.full - ph.in));
-          op = k;
-          ty = 30 * (1 - k);
-        } else if (p < ph.out) {
-          op = 1;
-          ty = 0;
-        } else if (p < ph.end) {
-          const k = easeInOut((p - ph.out) / (ph.end - ph.out));
-          op = 1 - k;
-          ty = -26 * k;
-        } else {
-          op = 0;
-          ty = -26;
-        }
-        const base = b.dataset.base ?? "";
-        b.style.opacity = op.toFixed(3);
-        b.style.transform = `${base}translateY(${ty}px)`;
-      });
-      if (ruleRef.current)
-        ruleRef.current.style.width = `${clamp((p - 0.5) / 0.1, 0, 1) * 120}px`;
-      if (progRef.current)
-        progRef.current.style.width = `${(target * 100).toFixed(2)}%`;
-      if (hintRef.current) hintRef.current.style.opacity = p > 0.03 ? "0" : "1";
-    };
-
-    const n = HERO_LAYERS.length;
-
-    const frameDesktop = () => {
-      current = lerp(current, target, 0.055);
-      cmx = lerp(cmx, mx, 0.045);
-      cmy = lerp(cmy, my, 0.045);
-      const p = current;
-      const t = performance.now() * 0.00004;
-      layerRefs.current.forEach((l, i) => {
-        if (!l) return;
-        const depth = i / (n - 1);
-        const speed = 0.08 + depth * 0.55;
-        const y = p * speed * window.innerHeight * -1.0;
-        const scale =
-          1.05 + depth * 0.05 + p * speed * 0.1 + Math.sin(t * 6.28 + i) * 0.004;
-        const px = cmx * (6 + depth * 28);
-        const py = cmy * (4 + depth * 18);
-        const rot = cmx * depth * 2.0;
-        l.style.transform = `translate3d(${px}px,${y + py}px,0) scale(${scale}) rotateY(${rot}deg)`;
-        const fade = HERO_LAYERS[i].fade;
-        l.style.opacity = fade
-          ? (1 - easeInOut(clamp((p - fade.start) / (fade.end - fade.start), 0, 1))).toString()
-          : "1";
-        const bl = i < n - 1 ? p * depth * 1.2 : 0;
-        l.style.filter = `blur(${bl.toFixed(2)}px) saturate(${1 + depth * 0.04})`;
-      });
-      applyPhases(p);
-      const dp = clamp((p - 0.44) / 0.3, 0, 1);
-      if (dc1Ref.current)
-        dc1Ref.current.style.strokeDashoffset = (289 * (1 - easeOut(dp))).toString();
-      if (dc2Ref.current)
-        dc2Ref.current.style.strokeDashoffset = (
-          239 * (1 - easeOut(clamp(dp * 1.1 - 0.05, 0, 1)))
-        ).toString();
-      if (decoRef.current) {
-        decoRef.current.style.opacity = (
-          clamp(dp * 1.3, 0, 1) * clamp(1 - (p - 0.78) / 0.08, 0, 1)
-        ).toFixed(3);
-        decoRef.current.style.transform = `translate(-50%,-50%) rotate(${p * 40}deg)`;
-      }
-      raf = requestAnimationFrame(frameDesktop);
-    };
-
-    const frameMobile = () => {
-      current = lerp(current, target, 0.1);
-      const p = current;
-      layerRefs.current.forEach((l, i) => {
-        if (!l) return;
-        const depth = i / (n - 1);
-        const speed = 0.06 + depth * 0.3;
-        const y = p * speed * window.innerHeight * -1.0;
-        const scale = 1.04 + p * speed * 0.05;
-        l.style.transform = `translate3d(0,${y}px,0) scale(${scale.toFixed(4)})`;
-        const fade = HERO_LAYERS[i].fade;
-        l.style.opacity = fade
-          ? (1 - easeInOut(clamp((p - fade.start) / (fade.end - fade.start), 0, 1))).toString()
-          : "1";
-      });
-      applyPhases(p);
-      raf = requestAnimationFrame(frameMobile);
-    };
-
-    if (mode === "reduced") {
-      layerRefs.current.forEach((l, i) => {
-        if (l) l.style.opacity = i === n - 1 ? "1" : "0";
-      });
-      applyPhases(0.55);
-    } else if (mode === "mobile") {
-      raf = requestAnimationFrame(frameMobile);
-    } else {
-      window.addEventListener("mousemove", onMouse);
-      raf = requestAnimationFrame(frameDesktop);
-    }
-
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("scroll", computeTarget);
-      window.removeEventListener("resize", computeTarget);
-      window.removeEventListener("mousemove", onMouse);
-    };
-  }, [mode]);
-
-  const heightClass =
-    mode === "mobile" || mode === "reduced" ? "hero-mobile" : "hero-desktop";
-
   return (
-    <>
-      <div ref={progRef} className="progress" />
-      <div ref={hintRef} className="scroll-hint">
-        Scorri
-      </div>
-
-      <div ref={heroRef} className={`hero ${heightClass}`}>
-        <div className="hero-sticky">
-          <div className="stage">
-            {HERO_LAYERS.map((layer, i) => (
-              <div
-                key={layer.id}
-                ref={(el) => {
-                  layerRefs.current[i] = el;
-                }}
-                className="layer"
-                style={{ zIndex: i + 1 }}
-              >
-                <Image
-                  src={mode === "mobile" ? layer.mobile : layer.desktop}
-                  alt={layer.alt}
-                  fill
-                  priority={i === HERO_LAYERS.length - 1}
-                  sizes="100vw"
-                  style={{ objectFit: "cover" }}
-                />
-              </div>
-            ))}
+    <section className="hero" id="top">
+      <div className="container hero__grid">
+        <div className="hero__content">
+          <p className="hero__eyebrow">{HERO.eyebrow}</p>
+          <h1 className="hero__title">{HERO.title}</h1>
+          <p className="hero__sub">{HERO.subtitle}</p>
+          <div className="hero__cta">
+            <a className="btn btn--primary" href={HERO.ctaPrimary.href}>
+              {HERO.ctaPrimary.label}
+            </a>
+            <a className="btn btn--ghost" href={HERO.ctaSecondary.href}>
+              {HERO.ctaSecondary.label}
+            </a>
           </div>
+          <p className="hero__phone">
+            Oppure chiamaci:{" "}
+            <a href={primaryPhone.href}>{primaryPhone.label}</a>
+          </p>
+        </div>
 
-          {mode === "desktop" && (
-            <svg
-              ref={decoRef}
-              className="ornament"
-              viewBox="0 0 100 100"
-              style={{
-                zIndex: 44,
-                width: "58vmin",
-                height: "58vmin",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%,-50%)",
-              }}
-            >
-              <circle
-                ref={dc1Ref}
-                cx="50"
-                cy="50"
-                r="46"
-                fill="none"
-                stroke="rgba(201,169,78,.45)"
-                strokeWidth="0.2"
-                strokeDasharray="289"
-                strokeDashoffset="289"
-              />
-              <circle
-                ref={dc2Ref}
-                cx="50"
-                cy="50"
-                r="38"
-                fill="none"
-                stroke="rgba(35,64,122,.35)"
-                strokeWidth="0.15"
-                strokeDasharray="239"
-                strokeDashoffset="239"
-              />
-            </svg>
-          )}
-
-          <div className="vignette" />
-          <div className="grain" />
-
-          <div className="hud">
-            <div
-              ref={(el) => {
-                blockRefs.current[0] = el;
-              }}
-              className="hud-block corner-date"
-              data-base=""
-            >
-              <div className="big">L. DA VINCI</div>
-              <div className="sm">1452 — 1519</div>
-            </div>
-            <div
-              ref={(el) => {
-                blockRefs.current[1] = el;
-              }}
-              className="hud-block motto"
-              data-base="translateY(-50%) "
-            >
-              <div className="it">
-                La scienza è figlia
-                <br />
-                dell&apos;esperienza
-              </div>
-            </div>
-            <div
-              ref={(el) => {
-                blockRefs.current[2] = el;
-              }}
-              className="hud-block titleblock"
-              data-base="translate(-50%,-50%) "
-            >
-              <div className="pre">Studio Tecnico</div>
-              <h1>
-                LO<span className="oro">M</span>BARDO
-              </h1>
-              <div className="sub">Your Technical Partner in Development</div>
-              <div ref={ruleRef} className="rule" />
-            </div>
-            <div
-              ref={(el) => {
-                blockRefs.current[3] = el;
-              }}
-              className="hud-block closing"
-              data-base="translateX(-50%) "
-            >
-              <div className="q">
-                «L&apos;immaginazione è l&apos;antecamera della realtà»
-              </div>
-              <div className="a">— Codex Atlanticus, fol. 105 r</div>
-            </div>
-          </div>
+        <div className="hero__media">
+          <Image
+            src="/hero/hero-03-centrale-desktop.webp"
+            alt="Illustrazione ispirata a Leonardo da Vinci — competenza tecnica e progettazione"
+            fill
+            priority
+            sizes="(max-width: 820px) 100vw, 50vw"
+          />
         </div>
       </div>
-    </>
+    </section>
   );
 }
