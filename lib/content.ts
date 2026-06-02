@@ -1,5 +1,29 @@
 // Contenuti reali dello Studio Tecnico Lombardo
 
+export const SITE = {
+  name: "Studio Lombardo",
+  legalName: "Studio Tecnico Lombardo",
+  email: "info@studiotecnicolombardo.com",
+  url: "https://www.studiotecnicolombardo.com",
+  whatsapp: "+393492727574",
+};
+
+export const NAV = [
+  { label: "Chi siamo", href: "#chi-siamo" },
+  { label: "Servizi", href: "#servizi" },
+  { label: "Per chi", href: "#per-chi" },
+  { label: "Contatti", href: "#contatti" },
+];
+
+export const HERO = {
+  eyebrow: "Studio Tecnico Lombardo · dal 2014",
+  title: "Progettiamo, costruiamo e valorizziamo i tuoi immobili.",
+  subtitle:
+    "Un unico referente tecnico per privati, imprese e investitori. Un percorso chiaro, ordinato e affidabile — dalla prima idea alla consegna.",
+  ctaPrimary: { label: "Richiedi consulenza", href: "#contatti" },
+  ctaSecondary: { label: "Scopri i servizi", href: "#servizi" },
+};
+
 export const ABOUT = {
   eyebrow: "Chi Siamo",
   title: "Un percorso chiaro,",

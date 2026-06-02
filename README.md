@@ -1,13 +1,14 @@
 # Studio Tecnico Lombardo — Sito (Next.js)
 
-Sito vetrina one-page con hero scroll-driven in parallasse, architettura Next.js 16 (App Router) + TypeScript + React 19.
+Sito vetrina one-page orientato alla **comunicazione e alla generazione di contatti**:
+messaggio chiaro, CTA onnipresenti, numeri come prova di esperienza. Architettura
+Next.js 16 (App Router) + TypeScript + React 19.
 
 ## Stack
 - **Next.js 16** (App Router, Turbopack)
-- **TypeScript** (strict)
-- **React 19**
-- **next/font/local** — font Cormorant + EB Garamond self-hosted (nessuna dipendenza da CDN)
-- **next/image** — immagini ottimizzate automaticamente (AVIF/WebP, responsive, lazy)
+- **TypeScript** (strict) + **React 19**
+- **next/font (Inter)** — sans-serif moderno, self-hosted al build (nessun CDN runtime)
+- **next/image** — immagini ottimizzate (AVIF/WebP, responsive, lazy); hero unica con `priority`
 
 ## Sviluppo locale
 ```bash
@@ -23,36 +24,44 @@ npm start
 ```
 
 ## Deploy su Vercel
-Pusha questa cartella sul repo GitHub collegato a Vercel. Vercel rileva Next.js
-automaticamente: nessuna configurazione necessaria. Ogni push su `main` ridistribuisce.
+Push sul repo collegato a Vercel: rileva Next.js automaticamente, nessuna config.
+Ogni push su `main` ridistribuisce.
 
 ## Struttura
 ```
 app/
-  layout.tsx        root layout, font locali, metadata
-  page.tsx          home (Hero + Sections)
-  globals.css       stili globali
-  fonts/            font .ttf self-hosted
+  layout.tsx        root layout, font Inter, metadata + OpenGraph + JSON-LD LocalBusiness
+  page.tsx          home (composizione sezioni)
+  globals.css       design system (token, tipografia, stili sezioni)
 components/
-  Hero.tsx          hero scroll-driven (engine desktop + mobile)
-  Sections.tsx      sezioni contenuto con reveal-on-scroll
+  Navbar.tsx        navbar fissa, telefono tap-to-call, CTA, menu mobile
+  Hero.tsx          hero comunicativo (headline + doppia CTA + immagine leggera)
+  Stats.tsx         numeri con count-up on-scroll (IntersectionObserver)
+  Targets.tsx       i tre pubblici (privati / imprese / investitori)
+  Services.tsx      i 9 servizi in griglia
+  About.tsx         chi siamo + metodo (fattibilità → progetto → cantiere → consegna)
+  Team.tsx          il team
+  Contact.tsx       contatti + form (invio via mailto precompilato)
+  Footer.tsx        wordmark, contatti, dati studio
+  MobileCta.tsx     sticky "Chiama ora / Scrivici" su mobile
+  Reveal.tsx        wrapper reveal-on-scroll (rispetta prefers-reduced-motion)
 lib/
-  hero-data.ts      sequenza immagini, fasi testo, servizi (tipizzato)
-  useDeviceMode.ts  hook rilevamento device + helper math
-public/hero/        immagini hero (desktop 16:9 + mobile 9:16)
+  content.ts        TUTTI i contenuti reali (testi, servizi, team, numeri, contatti)
+public/hero/        immagini hero (la home usa hero-03-centrale)
 ```
 
-## Due esperienze
-- **Desktop**: parallasse 3D completa (perspective, rotateY, blur focale, mouse-parallax, ornamenti animati).
-- **Mobile**: engine snello (solo opacity + transform), immagini verticali leggere, hero più corto.
-Selezione automatica via `useDeviceMode` (schermo ≤820px o pointer touch → mobile; prefers-reduced-motion → statico).
-
-## Sequenza scroll
-empty (fondo) → outro → centrale → focus → intro (cima).
-Scrollando: gli strati superiori svaniscono rivelando i sottostanti, mentre i testi
-entrano a fasi (data → motto → titolo → citazione).
+## Principi
+- **Messaggio e contatto prima dell'estetica.** Niente scroll-jacking, niente sequenze pesanti.
+- **Mobile-first**, telefono sempre visibile (navbar + sticky CTA).
+- **Performance**: pagina statica, una sola immagine hero (`priority`), font self-hosted,
+  JS minimo, animazioni leggere via IntersectionObserver/CSS.
+- **Accessibilità**: contrasti AA, `prefers-reduced-motion` rispettato.
 
 ## Personalizzazione contenuti
-- Testi e servizi: `lib/hero-data.ts` e `components/Sections.tsx`
-- Timing animazioni: array `PHASES` e campi `fade` in `lib/hero-data.ts`
-- Colori/tipografia: variabili CSS in cima a `app/globals.css`
+Tutto in **`lib/content.ts`** (headline, numeri, servizi, pubblici, team, contatti, email).
+Colori/tipografia: variabili CSS in cima a `app/globals.css`.
+
+## Form di contatto
+v1 via **mailto strutturato**: il pulsante apre il client email con oggetto e corpo
+precompilati verso `SITE.email` (in `lib/content.ts`). Per passare a un invio server-side
+(es. Resend/Formspree) basta sostituire l'handler in `components/Contact.tsx`.
