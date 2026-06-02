@@ -26,8 +26,10 @@ export const HERO = {
 
 export const MANIFESTO = {
   claim: "Your Technical Partner in Development.",
+  quote: "Ostinato rigore",
+  author: "Leonardo da Vinci",
   text:
-    "Dal sopralluogo alla consegna, un solo interlocutore tecnico che traduce ogni idea in un progetto concreto, autorizzato e di valore.",
+    "Lo stesso principio dietro ogni nostro progetto: precisione, metodo e nessuna improvvisazione, dal sopralluogo alla consegna.",
   cta: { label: "Richiedi consulenza", href: "#contatti" },
 };
 

@@ -360,34 +360,101 @@ button { font-family: inherit; cursor: pointer; }
   pointer-events: none;
 }
 .manifesto__inner { position: relative; width: 100%; display: flex; justify-content: flex-end; }
-.manifesto__content { max-width: 34rem; text-align: right; }
-.manifesto__claim {
-  font-size: clamp(1.8rem, 4vw, 2.9rem);
-  font-weight: 800;
-  letter-spacing: -0.02em;
+.manifesto__content {
+  max-width: 30rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Emblema: doppio cerchio luminoso con citazione di Leonardo */
+.emblem {
+  position: relative;
+  width: clamp(230px, 32vw, 360px);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  margin-bottom: 1.8rem;
+}
+.emblem__ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 169, 78, 0.4);
+}
+.emblem__ring--outer {
+  inset: 0;
+  box-shadow: 0 0 30px rgba(201, 169, 78, 0.14), inset 0 0 26px rgba(201, 169, 78, 0.08);
+  animation: emblem-pulse 4.5s ease-in-out infinite;
+}
+.emblem__ring--inner { inset: 11%; border-color: rgba(201, 169, 78, 0.22); }
+.emblem__glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0 66%,
+    rgba(201, 169, 78, 0.85) 83%,
+    rgba(255, 246, 214, 1) 90%,
+    transparent 96% 100%
+  );
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 0);
+  mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 0);
+  filter: drop-shadow(0 0 10px rgba(201, 169, 78, 0.65));
+  animation: emblem-spin 7s linear infinite;
+}
+@keyframes emblem-spin { to { transform: rotate(360deg); } }
+@keyframes emblem-pulse {
+  0%, 100% { box-shadow: 0 0 24px rgba(201, 169, 78, 0.12), inset 0 0 22px rgba(201, 169, 78, 0.06); }
+  50% { box-shadow: 0 0 50px rgba(201, 169, 78, 0.3), inset 0 0 30px rgba(201, 169, 78, 0.12); }
+}
+.emblem__quote {
+  margin: 0;
+  padding: 0 14%;
+  text-align: center;
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(1.5rem, 2.8vw, 2.3rem);
   line-height: 1.08;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+}
+.emblem__mark {
+  display: block;
+  font-style: normal;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 2.6em;
+  line-height: 0.55;
+  color: var(--gold);
+}
+.emblem__quote cite {
+  display: block;
+  margin-top: 0.8rem;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 0.6em;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold-dark);
 }
 .manifesto__text {
-  margin-top: 1rem;
-  font-size: clamp(1rem, 1.6vw, 1.18rem);
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
   color: var(--ink-soft);
-  margin-left: auto;
-  max-width: 44ch;
+  max-width: 42ch;
 }
 .manifesto__content .btn { margin-top: 1.6rem; }
 @media (max-width: 820px) {
   .manifesto__scrim {
     background: linear-gradient(
       180deg,
-      rgba(246, 245, 242, 0) 18%,
-      rgba(246, 245, 242, 0.78) 58%,
+      rgba(246, 245, 242, 0) 14%,
+      rgba(246, 245, 242, 0.8) 54%,
       var(--bg-soft) 100%
     );
   }
-  .manifesto { align-items: flex-end; padding-bottom: 2.5rem; min-height: 80vh; }
-  .manifesto__inner { justify-content: flex-start; }
-  .manifesto__content { text-align: left; }
-  .manifesto__text { margin-left: 0; }
+  .manifesto { align-items: flex-end; padding-bottom: 2.5rem; min-height: 86vh; }
+  .manifesto__inner { justify-content: center; }
 }
 
 /* ============================================================
@@ -668,4 +735,5 @@ button { font-family: inherit; cursor: pointer; }
   .reveal { opacity: 1; transform: none; transition: none; }
   .hero__cue svg { animation: none; }
   .hero__claim-inner { animation: none; }
+  .emblem__glow, .emblem__ring--outer { animation: none; }
 }
