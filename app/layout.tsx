@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     title: "Studio Tecnico Lombardo — Geometra a Locate Varesino (CO)",
     description:
       "Dal 2014 un unico referente tecnico per privati, imprese e investitori. Progettazione, direzione lavori, pratiche edilizie, perizie e rilievi.",
-    images: ["/hero/hero-03-centrale-desktop.webp"],
+    images: ["/assets/hero/hero-03-central-climax.webp"],
   },
 };
 
@@ -42,7 +42,7 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "ProfessionalService",
   name: SITE.legalName,
-  image: `${SITE.url}/hero/hero-03-centrale-desktop.webp`,
+  image: `${SITE.url}/assets/hero/hero-03-central-climax.webp`,
   url: SITE.url,
   email: SITE.email,
   telephone: "+390331363564",
