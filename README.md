@@ -1,40 +1,24 @@
-# Infinity
+# Studio Lombardo Sito
 
-Repository pubblica personale di Marco Lombardo per organizzare materiali, procedure, esperimenti, documentazione tecnica non riservata e sviluppo di strumenti di lavoro.
+Repository dedicato allo sviluppo e alla gestione del sito web professionale dello Studio Tecnico Marco Lombardo.
 
-## Scopo della repository
+## Obiettivo del progetto
 
-Questa repository raccoglie contenuti e strumenti destinati a supportare il lavoro tecnico, organizzativo e operativo dello Studio Lombardo.
+Realizzare un sito web chiaro, professionale e ordinato, finalizzato a presentare i servizi tecnici dello studio, migliorare la presenza online e creare una base solida per futuri sviluppi digitali.
 
-Può contenere:
+## Ambiti principali
 
-- procedure operative generiche;
-- documentazione tecnica non riservata;
-- modelli e template depurati da dati personali;
-- appunti di sviluppo;
-- prompt e istruzioni per assistenti AI;
-- esperimenti software;
-- utility e strumenti di supporto.
-
-## Regole di sicurezza
-
-Questa repository è pubblica.
-
-Non devono essere caricati:
-
-- dati personali di clienti, proprietari, imprese o fornitori;
-- indirizzi, dati catastali, codici fiscali o riferimenti identificativi reali;
-- pratiche edilizie, relazioni, contratti o documenti riservati;
-- credenziali, password, token, chiavi API o file `.env`;
-- preventivi, computi o documenti economici riferiti a lavori reali;
-- immagini o allegati riconducibili a persone, immobili o cantieri specifici.
-
-## Metodo di lavoro
-
-Le modifiche devono essere progressive, ordinate e documentate.
-
-Ogni cartella dovrà avere uno scopo chiaro e, quando necessario, un proprio file `README.md`.
+- Progettazione edilizia
+- Direzione lavori
+- Coordinamento sicurezza cantieri
+- Pratiche edilizie e catastali
+- Consulenza tecnica
+- Rilievi e restituzioni grafiche
 
 ## Stato del progetto
 
-Repository in fase iniziale di configurazione.
+Fase iniziale di impostazione.
+
+## Note operative
+
+Questo repository dovrà contenere esclusivamente materiali, codice, documentazione e configurazioni relativi al sito web professionale dello studio.
