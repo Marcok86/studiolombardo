@@ -6,3 +6,8 @@
 .env*.local
 .vercel
 next-env.d.ts
+
+# build / tooling artifacts
+tsconfig.tsbuildinfo
+# screenshot tooling locale (puppeteer + immagini di anteprima)
+/.shots
