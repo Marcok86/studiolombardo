@@ -9,9 +9,10 @@ export const SITE = {
 };
 
 export const NAV = [
-  { label: "Chi siamo", href: "#chi-siamo" },
+  { label: "Perché noi", href: "#perche-noi" },
+  { label: "Metodo", href: "#come-lavoriamo" },
   { label: "Servizi", href: "#servizi" },
-  { label: "Per chi", href: "#per-chi" },
+  { label: "Chi siamo", href: "#chi-siamo" },
   { label: "Contatti", href: "#contatti" },
 ];
 
@@ -69,6 +70,86 @@ export const SERVICES: Service[] = [
   { num: "VIII", title: "Sicurezza Cantieri", desc: "Coordinamento della sicurezza (CSP/CSE) e redazione PSC/POS per lavorare senza rischi e in regola." },
   { num: "IX", title: "Analisi Economiche", desc: "Business plan, computi metrici e studi di fattibilità per massimizzare il rendimento dei tuoi investimenti." },
 ];
+
+export const WHY = {
+  eyebrow: "Perché Studio Lombardo",
+  title: "Sei buoni motivi",
+  titleItalic: "per affidarti a noi",
+  lead:
+    "Non vendiamo singole prestazioni: garantiamo un percorso. Ecco cosa ci rende il partner tecnico su cui costruire.",
+  items: [
+    {
+      icon: "compass",
+      title: "Un unico referente",
+      desc: "Una sola regia tecnica dal primo sopralluogo alla consegna. Nessun rimpallo, nessuna dispersione.",
+    },
+    {
+      icon: "rigor",
+      title: "Zero improvvisazione",
+      desc: "Metodo, tempi certi e quadri economici chiari. Sai sempre dove sei e cosa succede dopo.",
+    },
+    {
+      icon: "badge",
+      title: "Competenza certificata",
+      desc: "Iscrizione all'Albo dei Geometri di Como (n. 2793) e oltre 10 anni tra progettazione, cantiere e catasto.",
+    },
+    {
+      icon: "shield",
+      title: "Dialoghiamo noi con la PA",
+      desc: "Pratiche edilizie, enti e catasto: gestiamo noi la burocrazia, tu segui solo le decisioni.",
+    },
+    {
+      icon: "target",
+      title: "Precisione strumentale",
+      desc: "Rilievi con GNSS RTK e Stazione Totale: misure affidabili per confini, frazionamenti e progetto.",
+    },
+    {
+      icon: "growth",
+      title: "Visione da investitore",
+      desc: "Analisi di fattibilità e computi metrici per massimizzare il rendimento di ogni operazione immobiliare.",
+    },
+  ],
+};
+
+export const PROCESS = {
+  eyebrow: "Come lavoriamo",
+  title: "Un metodo in sei tappe,",
+  titleItalic: "senza sorprese",
+  lead:
+    "Lo stesso percorso ordinato dietro ogni progetto. Trasparente, tracciabile, prevedibile — dalla prima idea alla valorizzazione finale.",
+  steps: [
+    {
+      num: "01",
+      title: "Sopralluogo & ascolto",
+      desc: "Capiamo obiettivo, vincoli e budget. Una fotografia tecnica precisa dello stato di fatto.",
+    },
+    {
+      num: "02",
+      title: "Fattibilità & strategia",
+      desc: "Verifiche urbanistiche e catastali, quadro economico iniziale. Decidiamo insieme la strada giusta.",
+    },
+    {
+      num: "03",
+      title: "Progetto",
+      desc: "Dal concept al progetto esecutivo completo: funzionale, conforme e pronto a costruire.",
+    },
+    {
+      num: "04",
+      title: "Pratiche & autorizzazioni",
+      desc: "CILA, SCIA, PdC e sanatorie. Gestiamo noi il dialogo con la Pubblica Amministrazione.",
+    },
+    {
+      num: "05",
+      title: "Direzione lavori & sicurezza",
+      desc: "Cantiere supervisionato: qualità esecutiva, rispetto di tempi e costi, coordinamento sicurezza.",
+    },
+    {
+      num: "06",
+      title: "Consegna & valorizzazione",
+      desc: "Fine lavori, agibilità, APE. L'immobile è pronto — e vale di più di quando siamo partiti.",
+    },
+  ],
+};
 
 export const TARGETS = [
   { title: "Privati", desc: "La casa dei tuoi sogni, senza pensieri. Ci occupiamo di tutto: dai permessi alla progettazione, fino alla chiusura dei lavori." },

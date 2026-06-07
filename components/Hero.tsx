@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { HERO, CONTACT, MANIFESTO } from "@/lib/content";
+import MagneticButton from "./MagneticButton";
 
 const primaryPhone = CONTACT.phones[0];
 
@@ -143,9 +144,9 @@ export default function Hero() {
             <h1 className="hero__title">{HERO.title}</h1>
             <p className="hero__sub">{HERO.subtitle}</p>
             <div className="hero__cta">
-              <a className="btn btn--primary" href={HERO.ctaPrimary.href}>
+              <MagneticButton className="btn btn--primary" href={HERO.ctaPrimary.href}>
                 {HERO.ctaPrimary.label}
-              </a>
+              </MagneticButton>
               <a className="btn btn--ghost" href={HERO.ctaSecondary.href}>
                 {HERO.ctaSecondary.label}
               </a>
