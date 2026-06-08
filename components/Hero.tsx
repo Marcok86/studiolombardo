@@ -1,195 +1,189 @@
 "use client";
 
+import { useRef } from "react";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
-import { HERO, CONTACT, MANIFESTO } from "@/lib/content";
+import dynamic from "next/dynamic";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useMotionValue,
+  useSpring,
+  useReducedMotion,
+} from "motion/react";
+import { HERO } from "@/lib/content";
 import MagneticButton from "./MagneticButton";
+import Icon from "./Icon";
+import { useConsult } from "./ConsultDrawer";
 
-const primaryPhone = CONTACT.phones[0];
-
-// Helper di interpolazione (vedi spec parallax)
-const clamp = (v: number, min = 0, max = 1) => Math.min(max, Math.max(min, v));
-const mix = (a: number, b: number, t: number) => a + (b - a) * t;
-const map = (p: number, a: number, b: number, c: number, d: number) =>
-  mix(c, d, clamp((p - a) / (b - a)));
-// Dissolvenza in/out: 0 -> 1 (in) e 1 -> 0 (out)
-const fadeInOut = (p: number, inA: number, inB: number, outA: number, outB: number) =>
-  clamp(Math.min(map(p, inA, inB, 0, 1), map(p, outA, outB, 1, 0)));
-
-// I 5 frame della sequenza, in ordine di profondità (background -> foreground)
-const FRAMES = [
-  { src: "/assets/hero/hero-01-intro-right.webp", alt: "Leonardo da Vinci con compasso e libro", pos: "78% center" },
-  { src: "/assets/hero/hero-02-left-focus.webp", alt: "", pos: "22% center" },
-  { src: "/assets/hero/hero-03-central-climax.webp", alt: "", pos: "50% center" },
-  { src: "/assets/hero/hero-04-outro-right.webp", alt: "", pos: "80% center" },
-  { src: "/assets/hero/hero-05-empty-technical.webp", alt: "", pos: "50% center" },
-];
+// Scena 3D solo client-side (three.js usa window/WebGL)
+const Hero3D = dynamic(() => import("./Hero3D"), { ssr: false });
 
 export default function Hero() {
-  const [parallax, setParallax] = useState(false);
-  const wrapRef = useRef<HTMLElement>(null);
-  const layerRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const phaseBRef = useRef<HTMLDivElement>(null);
-  const phaseCRef = useRef<HTMLDivElement>(null);
-  const phaseDRef = useRef<HTMLDivElement>(null);
-  const cueRef = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLElement>(null);
+  const reduce = useReducedMotion();
+  const consult = useConsult();
 
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    setParallax(true);
+  // --- parallax da scroll ---
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "16%"]);
+  const bgScale = useTransform(scrollYProgress, [0, 1], [1.06, 1.16]);
+  const contentY = useTransform(scrollYProgress, [0, 1], [0, 90]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.85], [1, 0]);
 
-    let raf = 0;
-    const update = () => {
-      raf = 0;
-      const wrap = wrapRef.current;
-      if (!wrap) return;
-      const total = wrap.offsetHeight - window.innerHeight;
-      // Finché il layout parallax (altezza piena) non è applicato, total <= 0:
-      // trattiamo come inizio (p=0) così l'intro resta visibile.
-      const p = total > 0 ? clamp(-wrap.getBoundingClientRect().top / total) : 0;
+  // --- parallax 3D dal puntatore (piani di profondità) ---
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const smx = useSpring(mx, { stiffness: 110, damping: 20, mass: 0.6 });
+  const smy = useSpring(my, { stiffness: 110, damping: 20, mass: 0.6 });
 
-      // Movimento dei 5 layer: opacità (cross-fade) + scala + traslazione + rotazione prospettica
-      const configs = [
-        { o: map(p, 0.14, 0.34, 1, 0), s: map(p, 0, 1, 1.04, 1.1), x: map(p, 0, 1, 0, -3), y: map(p, 0, 1, 0, -1), rx: 0, ry: map(p, 0, 1, 0, -2) },
-        { o: fadeInOut(p, 0.18, 0.32, 0.38, 0.55), s: map(p, 0.18, 0.55, 1.08, 1.02), x: map(p, 0.18, 0.55, 2, -2), y: map(p, 0.18, 0.55, 1, -1), rx: 0, ry: map(p, 0.18, 0.55, 2, -1) },
-        { o: fadeInOut(p, 0.4, 0.55, 0.62, 0.75), s: map(p, 0.4, 0.75, 1.02, 1.12), x: map(p, 0.4, 0.75, 0, 1), y: map(p, 0.4, 0.75, 1, -2), rx: map(p, 0.4, 0.75, 0, 1), ry: 0 },
-        { o: fadeInOut(p, 0.66, 0.78, 0.84, 0.94), s: map(p, 0.66, 0.94, 1.02, 1.06), x: map(p, 0.66, 0.94, -1, 0), y: map(p, 0.66, 0.94, 0, -1), rx: 0, ry: 0 },
-        { o: map(p, 0.86, 1.0, 0, 1), s: map(p, 0.86, 1.0, 1.0, 1.03), x: 0, y: map(p, 0.86, 1.0, 0, -1), rx: 0, ry: 0 },
-      ];
-      layerRefs.current.forEach((layer, i) => {
-        if (!layer) return;
-        const c = configs[i];
-        layer.style.opacity = c.o.toFixed(3);
-        layer.style.transform = `translate3d(${c.x}vw, ${c.y}vh, ${i * -40}px) scale(${c.s}) rotateX(${c.rx}deg) rotateY(${c.ry}deg)`;
-      });
+  const bgMX = useTransform(smx, [-0.5, 0.5], [26, -26]);
+  const bgMY = useTransform(smy, [-0.5, 0.5], [20, -20]);
+  const gridMX = useTransform(smx, [-0.5, 0.5], [-16, 16]);
+  const gridMY = useTransform(smy, [-0.5, 0.5], [-12, 12]);
+  const orbMX = useTransform(smx, [-0.5, 0.5], [50, -50]);
+  const orbMY = useTransform(smy, [-0.5, 0.5], [40, -40]);
+  const cMX = useTransform(smx, [-0.5, 0.5], [-10, 10]);
+  const cMY = useTransform(smy, [-0.5, 0.5], [-7, 7]);
+  const rotX = useTransform(smy, [-0.5, 0.5], [2.2, -2.2]);
+  const rotY = useTransform(smx, [-0.5, 0.5], [-2.6, 2.6]);
 
-      // Fasi testuali (HUD) — appaiono e svaniscono in momenti diversi, restando leggibili
-      if (contentRef.current) {
-        contentRef.current.style.opacity = String(map(p, 0.12, 0.26, 1, 0));
-        contentRef.current.style.transform = `translate3d(0, ${p * -60}px, 0)`;
-      }
-      if (phaseBRef.current) {
-        phaseBRef.current.style.opacity = String(fadeInOut(p, 0.2, 0.3, 0.36, 0.46));
-        phaseBRef.current.style.transform = `translate3d(0, ${map(p, 0.2, 0.46, 18, -18)}px, 0)`;
-      }
-      if (phaseCRef.current) {
-        phaseCRef.current.style.opacity = String(fadeInOut(p, 0.44, 0.54, 0.6, 0.7));
-        phaseCRef.current.style.transform = `translate3d(0, ${map(p, 0.44, 0.7, 16, -16)}px, 0)`;
-      }
-      if (phaseDRef.current) {
-        phaseDRef.current.style.opacity = String(fadeInOut(p, 0.68, 0.8, 0.9, 0.97));
-        phaseDRef.current.style.transform = `translate3d(0, ${map(p, 0.68, 0.97, 20, -10)}px, 0)`;
-      }
-      if (cueRef.current) cueRef.current.style.opacity = String(1 - clamp(p / 0.1));
-    };
+  // --- gating reduced-motion: fade sì, movimento no ---
+  // Props d'entrata: con reduce solo opacity, altrimenti slide-up con easing.
+  const rise = (delay: number, dy = 24) =>
+    reduce
+      ? { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.6, delay } }
+      : {
+          initial: { opacity: 0, y: dy },
+          animate: { opacity: 1, y: 0 },
+          transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay },
+        };
 
-    const onScroll = () => {
-      if (!raf) raf = requestAnimationFrame(update);
-    };
-    update();
-    // L'altezza definitiva (classe is-parallax) è committata da React in modo
-    // differito: rilanciamo update finché il layout non si è stabilizzato.
-    requestAnimationFrame(() => requestAnimationFrame(update));
-    const timers = [setTimeout(update, 120), setTimeout(update, 400)];
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    window.addEventListener("load", update);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      window.removeEventListener("load", update);
-      timers.forEach(clearTimeout);
-      cancelAnimationFrame(raf);
-    };
-  }, []);
+  // Parallax-scroll: il fade (contentOpacity) resta sempre; il movimento cade con reduce.
+  const heroBgStyle = reduce ? {} : { y: bgY, scale: bgScale };
+  const heroContentStyle = reduce
+    ? { opacity: contentOpacity }
+    : { y: contentY, opacity: contentOpacity };
+
+  // Wrapper tilt del puntatore: nessun transform sotto reduce.
+  const heroTiltStyle = reduce
+    ? {}
+    : { x: cMX, y: cMY, rotateX: rotX, rotateY: rotY, transformPerspective: 1200 };
+
+  function onMove(e: React.MouseEvent<HTMLElement>) {
+    if (reduce) return;
+    const r = e.currentTarget.getBoundingClientRect();
+    mx.set((e.clientX - r.left) / r.width - 0.5);
+    my.set((e.clientY - r.top) / r.height - 0.5);
+  }
+  function onLeave() {
+    mx.set(0);
+    my.set(0);
+  }
 
   return (
-    <section
-      ref={wrapRef}
-      className={`hero ${parallax ? "is-parallax" : ""}`}
-      id="top"
-    >
-      <div className="hero__sticky">
-        <div className="hero__scene">
-          {FRAMES.map((f, i) => (
-            <div
-              key={f.src}
-              className="hero__layer"
-              ref={(el) => {
-                layerRefs.current[i] = el;
-              }}
-              style={i === 0 ? undefined : { opacity: 0 }}
-              aria-hidden={f.alt ? undefined : true}
+    <section className="hero" id="top" ref={ref} onMouseMove={onMove} onMouseLeave={onLeave}>
+      {/* sfondo: scroll (esterno) + mouse (interno) */}
+      <motion.div className="hero__bg" style={heroBgStyle}>
+        <motion.div className="hero__bg-layer" style={{ x: bgMX, y: bgMY }}>
+          <Image
+            src="/assets/textures/arch-dark.png"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            style={{ objectFit: "cover" }}
+          />
+        </motion.div>
+      </motion.div>
+
+      <motion.div className="hero__grid" style={{ x: gridMX, y: gridMY }} aria-hidden />
+      <motion.div className="hero__orb" style={{ x: orbMX, y: orbMY }} aria-hidden />
+
+      <div className="container hero__inner">
+        <motion.div className="hero__content" style={heroContentStyle}>
+          <motion.div style={heroTiltStyle}>
+            <motion.p className="eyebrow hero__eyebrow" {...rise(0, 14)}>
+              {HERO.eyebrow}
+            </motion.p>
+
+            <h1 className="hero__title">
+              <motion.span className="lead-word" {...rise(0.05, 24)}>
+                {HERO.titleLead}
+              </motion.span>
+              <motion.span style={{ display: "block" }} {...rise(0.14, 24)}>
+                {HERO.titleRest}
+              </motion.span>
+            </h1>
+
+            <motion.p className="hero__sub" {...rise(0.24, 18)}>
+              {HERO.sub}
+            </motion.p>
+
+            <motion.p className="hero__desc" {...rise(0.32, 16)}>
+              {HERO.desc}
+            </motion.p>
+
+            <motion.ul
+              className="hero__tags"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.42 }}
+              aria-label="Ambiti operativi"
             >
-              <Image
-                src={f.src}
-                alt={f.alt}
-                fill
-                sizes="100vw"
-                priority={i === 0}
-                style={{ objectPosition: f.pos }}
-              />
-            </div>
-          ))}
-          <div className="hero__vignette" aria-hidden />
-        </div>
+              {HERO.tags.map((t) => (
+                <li key={t}>{t}</li>
+              ))}
+            </motion.ul>
 
-        <div className="hero__scrim" aria-hidden />
+            <motion.p className="hero__motto" {...rise(0.5, 12)}>
+              {HERO.motto}
+            </motion.p>
 
-        {/* Fase A — intro: contenuto principale a sinistra (frame 01, figura a destra) */}
-        <div className="container hero__inner">
-          <div className="hero__content" ref={contentRef}>
-            <p className="hero__eyebrow">{HERO.eyebrow}</p>
-            <h1 className="hero__title">{HERO.title}</h1>
-            <p className="hero__sub">{HERO.subtitle}</p>
-            <div className="hero__cta">
-              <MagneticButton className="btn btn--primary" href={HERO.ctaPrimary.href}>
+            <motion.div className="hero__actions" {...rise(0.58, 18)}>
+              <MagneticButton
+                href={HERO.ctaPrimary.href}
+                className="btn btn--primary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  consult.open();
+                }}
+              >
                 {HERO.ctaPrimary.label}
+                <Icon name="arrow" size={18} className="arr" />
               </MagneticButton>
-              <a className="btn btn--ghost" href={HERO.ctaSecondary.href}>
+              <a href={HERO.ctaSecondary.href} className="btn btn--ghost">
                 {HERO.ctaSecondary.label}
               </a>
-            </div>
-            <p className="hero__phone">
-              Oppure chiamaci: <a href={primaryPhone.href}>{primaryPhone.label}</a>
-            </p>
-          </div>
-        </div>
+            </motion.div>
 
-        {/* Fase B — valore: testo a destra (frame 02, figura a sinistra) */}
-        <div className="hero__hud hero__hud--right" ref={phaseBRef} aria-hidden>
-          <div className="hero__hud-box">
-            <p className="hero__hud-line">
-              Un solo interlocutore tecnico, dal primo sopralluogo alla consegna.
-            </p>
-          </div>
-        </div>
+            <motion.ul
+              className="hero__proof"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.9, delay: 0.7 }}
+            >
+              {HERO.proof.map((p) => (
+                <li key={p}>
+                  <Icon name="check" size={16} />
+                  {p}
+                </li>
+              ))}
+            </motion.ul>
+          </motion.div>
+        </motion.div>
 
-        {/* Fase C — climax: citazione di Leonardo (frame 03, composizione centrale) */}
-        <div className="hero__hud hero__hud--center" ref={phaseCRef} aria-hidden>
-          <div className="hero__hud-box">
-            <p className="hero__quote">« {MANIFESTO.quote} »</p>
-            <p className="hero__quote-cite">{MANIFESTO.author}</p>
-          </div>
+        <div className="hero__viz" aria-hidden>
+          <Hero3D />
         </div>
+      </div>
 
-        {/* Fase D — outro: claim finale + invito (frame 04, figura a destra) */}
-        <div className="hero__hud hero__hud--left" ref={phaseDRef} aria-hidden>
-          <div className="hero__hud-box">
-            <p className="hero__claim-inner">{MANIFESTO.claim}</p>
-            <a className="btn btn--primary" href={MANIFESTO.cta.href}>
-              {MANIFESTO.cta.label}
-            </a>
-          </div>
-        </div>
-
-        <div className="hero__cue" ref={cueRef} aria-hidden>
-          <span>Scorri</span>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M6 9l6 6 6-6" />
-          </svg>
-        </div>
+      <div className="hero__scroll" aria-hidden>
+        <span />
+        Scorri
       </div>
     </section>
   );
