@@ -1,8 +1,6 @@
 "use client";
 
 import { useRef } from "react";
-import Image from "next/image";
-import dynamic from "next/dynamic";
 import {
   motion,
   useScroll,
@@ -15,9 +13,7 @@ import { HERO } from "@/lib/content";
 import MagneticButton from "./MagneticButton";
 import Icon from "./Icon";
 import { useConsult } from "./ConsultDrawer";
-
-// Scena 3D solo client-side (three.js usa window/WebGL)
-const Hero3D = dynamic(() => import("./Hero3D"), { ssr: false });
+import HeroVideo from "./HeroVideo";
 
 export default function Hero() {
   const ref = useRef<HTMLElement>(null);
@@ -89,14 +85,7 @@ export default function Hero() {
       {/* sfondo: scroll (esterno) + mouse (interno) */}
       <motion.div className="hero__bg" style={heroBgStyle}>
         <motion.div className="hero__bg-layer" style={{ x: bgMX, y: bgMY }}>
-          <Image
-            src="/assets/textures/arch-dark.png"
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            style={{ objectFit: "cover" }}
-          />
+          <HeroVideo />
         </motion.div>
       </motion.div>
 
@@ -176,9 +165,6 @@ export default function Hero() {
           </motion.div>
         </motion.div>
 
-        <div className="hero__viz" aria-hidden>
-          <Hero3D />
-        </div>
       </div>
 
       <div className="hero__scroll" aria-hidden>
