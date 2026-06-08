@@ -7,6 +7,8 @@ import { useReducedMotion } from "motion/react";
 const CLIPS = [
   "/assets/hero-video/clip-1-rilievo.mp4",
   "/assets/hero-video/clip-2-autocad.mp4",
+  "/assets/hero-video/clip-3-pratiche.mp4",
+  "/assets/hero-video/clip-4-ape.mp4",
   "/assets/hero-video/clip-5-progetti.mp4",
 ];
 const POSTER = "/assets/hero-video/poster.jpg";
