@@ -27,7 +27,7 @@ export default function CursorGlow() {
       y.set(e.clientY);
       if (!active) setActive(true);
       const t = e.target as HTMLElement | null;
-      setHot(!!t?.closest("a, button, .showcard, [data-cursor]"));
+      setHot(!!t?.closest("a, button, .glass, [data-cursor]"));
     };
     const leave = () => setActive(false);
 

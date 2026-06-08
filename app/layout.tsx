@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
-import { Inter, Cinzel } from "next/font/google";
+import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { SITE } from "@/lib/content";
 import CursorGlow from "@/components/CursorGlow";
+import ConsultProvider from "@/components/ConsultDrawer";
+import { Toaster } from "sonner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -10,9 +12,9 @@ const inter = Inter({
   display: "swap",
 });
 
-// Display rinascimentale: capitali ispirate alle iscrizioni romane.
-// Usato per i momenti cerimoniali (eyebrow, titoli, citazione Leonardo).
-const cinzel = Cinzel({
+// Display tecnico: grottesca geometrica per i titoli grandi.
+// Comunica precisione e modernità — coerente con "ordine tecnico".
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-display",
   weight: ["400", "500", "600", "700"],
@@ -76,14 +78,30 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="it" className={`${inter.variable} ${cinzel.variable}`}>
+    <html lang="it" className={`${inter.variable} ${spaceGrotesk.variable}`}>
       <body>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <CursorGlow />
-        {children}
+        <ConsultProvider>{children}</ConsultProvider>
+        <Toaster
+          theme="dark"
+          position="bottom-right"
+          gap={10}
+          toastOptions={{
+            className: "lb-toast",
+            style: {
+              background: "rgba(18, 22, 28, 0.92)",
+              backdropFilter: "blur(12px)",
+              border: "1px solid var(--line-strong)",
+              color: "var(--ink)",
+              borderRadius: "14px",
+              fontFamily: "var(--font)",
+            },
+          }}
+        />
       </body>
     </html>
   );

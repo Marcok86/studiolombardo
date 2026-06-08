@@ -13,11 +13,13 @@ export default function MagneticButton({
   children,
   className = "",
   strength = 0.35,
+  onClick,
 }: {
   href: string;
   children: React.ReactNode;
   className?: string;
   strength?: number;
+  onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
 }) {
   const ref = useRef<HTMLAnchorElement>(null);
   const reduce = useReducedMotion();
@@ -47,6 +49,7 @@ export default function MagneticButton({
       style={{ x, y }}
       onMouseMove={handleMove}
       onMouseLeave={reset}
+      onClick={onClick}
     >
       {children}
     </motion.a>
