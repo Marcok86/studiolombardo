@@ -1,16 +1,23 @@
-import { CONTACT } from "@/lib/content";
+"use client";
 
-const primaryPhone = CONTACT.phones[0];
+import { CONTACT } from "@/lib/content";
+import { useConsult } from "./ConsultDrawer";
 
 export default function MobileCta() {
+  const consult = useConsult();
+  const phone = CONTACT.phones[0]?.href ?? "#";
   return (
-    <div className="mcta">
-      <a className="btn btn--ghost" href="#contatti">
-        Scrivici
+    <div className="mobilecta">
+      <a href={phone} className="btn btn--ghost">
+        Chiama
       </a>
-      <a className="btn btn--primary" href={primaryPhone.href}>
-        Chiama ora
-      </a>
+      <button
+        type="button"
+        className="btn btn--primary"
+        onClick={() => consult.open()}
+      >
+        Consulenza
+      </button>
     </div>
   );
 }

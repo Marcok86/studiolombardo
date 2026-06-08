@@ -1,57 +1,118 @@
 // Contenuti reali dello Studio Tecnico Lombardo
+// Strategia: "Ordine tecnico" — fiducia e metodo prima della prestazione.
+// Tono: professionale, diretto, sicuro, concreto, cautelativo. Mai da agenzia.
 
 export const SITE = {
   name: "Studio Lombardo",
   legalName: "Studio Tecnico Lombardo",
+  positioning: "Ordine tecnico per pratiche edilizie, cantieri e immobili.",
   email: "info@studiotecnicolombardo.com",
   url: "https://www.studiotecnicolombardo.com",
   whatsapp: "+393492727574",
 };
 
 export const NAV = [
-  { label: "Perché noi", href: "#perche-noi" },
-  { label: "Metodo", href: "#come-lavoriamo" },
-  { label: "Servizi", href: "#servizi" },
-  { label: "Chi siamo", href: "#chi-siamo" },
+  // "Criticità": più elegante di "Il problema" come voce di menu
+  { label: "Criticità", href: "#problema" },
+  { label: "Metodo", href: "#metodo" },
+  { label: "Aree tecniche", href: "#servizi" },
+  { label: "Progetti", href: "#progetti" },
+  { label: "Per chi", href: "#per-chi" },
+  { label: "Studio", href: "#studio" },
   { label: "Contatti", href: "#contatti" },
 ];
 
 export const HERO = {
-  eyebrow: "Studio Tecnico Lombardo · dal 2014",
-  title: "Progettiamo, costruiamo e valorizziamo i tuoi immobili.",
-  subtitle:
-    "Un unico referente tecnico per privati, imprese e investitori. Un percorso chiaro, ordinato e affidabile — dalla prima idea alla consegna.",
-  ctaPrimary: { label: "Richiedi consulenza", href: "#contatti" },
-  ctaSecondary: { label: "Scopri i servizi", href: "#servizi" },
-};
-
-export const MANIFESTO = {
-  claim: "Your Technical Partner in Development.",
-  quote: "Ostinato rigore",
-  author: "Leonardo da Vinci",
-  text:
-    "Lo stesso principio dietro ogni nostro progetto: precisione, metodo e nessuna improvvisazione, dal sopralluogo alla consegna.",
-  cta: { label: "Richiedi consulenza", href: "#contatti" },
-};
-
-export const ABOUT = {
-  eyebrow: "Chi Siamo",
-  title: "Un percorso chiaro,",
-  titleItalic: "ordinato e affidabile",
-  paragraphs: [
-    "Lo Studio nasce nel 2014, come naturale evoluzione di un percorso formativo completo e di un'esperienza decennale maturata tra progettazione, cantiere e gestione tecnica.",
-    "Abbiamo scelto di creare una realtà indipendente, capace di rispondere in modo concreto alle esigenze tecniche, urbanistiche ed operative poste ogni giorno da privati, imprese e investitori.",
+  eyebrow: "Studio Tecnico Lombardo",
+  // headline: bianco + parola-accento ("ordine")
+  titleLead: "Ordine tecnico",
+  titleRest: "per pratiche edilizie, cantieri e immobili.",
+  // sub-headline forte (cosa garantisco)
+  sub: "Dalla verifica iniziale alla gestione dell'intervento, con metodo, documenti e responsabilità chiare.",
+  // descrizione operativa, più breve e incisiva
+  desc: "Affianco privati, imprese e amministratori nella gestione tecnica di pratiche edilizie, cantieri, sicurezza e rilievi topografici, con un metodo chiaro, documentato e verificabile.",
+  // frase identitaria
+  motto: "Prima si verifica. Poi si decide. Poi si interviene.",
+  // tag operativi in overlay
+  tags: ["verifica", "pratica", "cantiere", "rilievo", "sicurezza"],
+  ctaPrimary: { label: "Richiedi una consulenza tecnica", href: "#contatti" },
+  ctaSecondary: { label: "Scopri le aree tecniche", href: "#servizi" },
+  // micro-prove sotto la hero
+  proof: [
+    "Iscritto all'Albo dei Geometri di Como",
+    "Esperienza in pratiche edilizie, progettazione e cantiere",
+    "Approccio tecnico, documentale e cautelativo",
   ],
-  quote:
-    "Il nostro obiettivo è garantire un percorso chiaro, ordinato e affidabile, eliminando incertezza, dispersioni e improvvisazione.",
 };
 
-export const STATS = [
-  { value: "150", suffix: "+", label: "Progetti svolti" },
-  { value: "10", suffix: "+", label: "Anni di esperienza" },
-  { value: "100", suffix: "%", label: "Affidabilità" },
-  { value: "30", suffix: "+", label: "Comuni serviti" },
+// Cinque principi-identità (banda editoriale)
+export const PRINCIPLES = [
+  "Ordine nei documenti",
+  "Chiarezza nelle pratiche",
+  "Controllo in cantiere",
+  "Metodo nelle decisioni",
+  "Responsabilità documentata",
 ];
+
+// 2 — Sezione problema: far sentire l'utente "capito"
+export const PROBLEM = {
+  eyebrow: "Perché serve metodo",
+  title: "Quando manca una guida tecnica, il rischio aumenta.",
+  lead:
+    "Un intervento edilizio non è fatto solo di lavori. Prima, durante e dopo servono verifiche, documenti, ruoli chiari e decisioni corrette.",
+  items: [
+    {
+      icon: "layers",
+      title: "Documenti incompleti",
+      desc: "Planimetrie, pratiche precedenti, stato di fatto e dati catastali non sempre coincidono. Prima di procedere serve una verifica tecnica.",
+    },
+    {
+      icon: "docs",
+      title: "Pratiche impostate male",
+      desc: "Una procedura edilizia errata può generare ritardi, richieste integrative, costi aggiuntivi o responsabilità evitabili.",
+    },
+    {
+      icon: "site",
+      title: "Cantiere senza controllo",
+      desc: "Impresa, committente e tecnico devono operare con ruoli chiari, passaggi documentati e verifiche puntuali.",
+    },
+    {
+      icon: "shield",
+      title: "Responsabilità poco definite",
+      desc: "Ogni intervento comporta obblighi tecnici, amministrativi e documentali che devono essere gestiti con attenzione.",
+    },
+  ],
+};
+
+// 3 — Metodo: perché sei affidabile (più del portfolio)
+export const METHOD = {
+  eyebrow: "Il metodo",
+  title: "Il mio metodo: verificare, impostare, gestire, documentare.",
+  lead:
+    "Lo stesso percorso ordinato dietro ogni incarico: tracciabile, prevedibile, documentato. Non lavoro a sensazione, ma con procedura.",
+  steps: [
+    {
+      num: "01",
+      title: "Analisi iniziale",
+      desc: "Inquadro il caso, raccolgo le informazioni e individuo le criticità tecniche da verificare.",
+    },
+    {
+      num: "02",
+      title: "Verifica documentale",
+      desc: "Controllo stato di fatto, atti disponibili, pratiche edilizie, catasto e condizioni operative.",
+    },
+    {
+      num: "03",
+      title: "Strategia tecnica",
+      desc: "Definisco il percorso più corretto in base all'obiettivo: pratica, progetto, cantiere, rilievo o consulenza.",
+    },
+    {
+      num: "04",
+      title: "Gestione e chiusura",
+      desc: "Coordino le attività, documento i passaggi e accompagno l'incarico fino alla conclusione.",
+    },
+  ],
+};
 
 export interface Service {
   num: string;
@@ -59,131 +120,129 @@ export interface Service {
   desc: string;
 }
 
+// 4 — Aree di intervento (dopo problema e metodo). Testo sobrio.
+export const SERVICES_INTRO = {
+  eyebrow: "Aree di intervento tecnico",
+  title: "Soluzioni tecniche per immobili, pratiche e cantieri.",
+  lead:
+    "Un unico riferimento tecnico per analizzare, impostare, seguire e documentare ogni fase dell'intervento.",
+};
+
 export const SERVICES: Service[] = [
-  { num: "I", title: "Progettazione", desc: "Dallo studio di fattibilità al design d'interni, trasformiamo la tua idea in un progetto esecutivo completo e funzionale." },
-  { num: "II", title: "Direzione Lavori", desc: "Supervisione tecnica rigorosa in cantiere per garantire qualità esecutiva, rispetto dei tempi e controllo dei costi." },
-  { num: "III", title: "Pratiche Edilizie", desc: "Gestione completa di CILA, SCIA, PdC e sanatorie. Dialoghiamo noi con la Pubblica Amministrazione per te." },
-  { num: "IV", title: "Perizie e Stime", desc: "Valutazioni immobiliari asseverate e consulenze tecniche di parte (CTP) per privati e tribunali." },
-  { num: "V", title: "Successioni", desc: "Assistenza completa per dichiarazioni di successione ereditaria, riunioni di usufrutto e volture catastali." },
-  { num: "VI", title: "Rilievi Topografici", desc: "Misure di precisione con strumentazione GNSS RTK e Stazione Totale per confini, frazionamenti e inserimenti in mappa." },
-  { num: "VII", title: "APE & Energia", desc: "Redazione Certificati Energetici (APE) e consulenza per la riqualificazione e l'efficientamento degli edifici." },
-  { num: "VIII", title: "Sicurezza Cantieri", desc: "Coordinamento della sicurezza (CSP/CSE) e redazione PSC/POS per lavorare senza rischi e in regola." },
-  { num: "IX", title: "Analisi Economiche", desc: "Business plan, computi metrici e studi di fattibilità per massimizzare il rendimento dei tuoi investimenti." },
+  {
+    num: "01",
+    title: "Pratiche edilizie e urbanistiche",
+    desc: "Gestione di CILA, SCIA, permessi, sanatorie, verifiche preliminari e rapporti con gli enti.",
+  },
+  {
+    num: "02",
+    title: "Progettazione edilizia",
+    desc: "Soluzioni tecniche per interventi residenziali, ristrutturazioni, modifiche distributive e opere edilizie.",
+  },
+  {
+    num: "03",
+    title: "Direzione lavori",
+    desc: "Controllo tecnico dell'esecuzione, coordinamento operativo e verifica della corretta realizzazione delle opere.",
+  },
+  {
+    num: "04",
+    title: "Sicurezza cantieri",
+    desc: "Coordinamento della sicurezza in progettazione ed esecuzione (CSP/CSE), con attenzione agli obblighi documentali.",
+  },
+  {
+    num: "05",
+    title: "Rilievi topografici GNSS/RTK",
+    desc: "Rilievi plano-altimetrici, restituzioni grafiche, tracciamenti, verifiche e supporto tecnico al progetto.",
+  },
+  {
+    num: "06",
+    title: "Consulenze tecniche immobiliari",
+    desc: "Analisi di situazioni edilizie, catastali, condominiali o documentali prima di acquistare, vendere o intervenire.",
+  },
+  {
+    num: "07",
+    title: "Computi e contabilità lavori",
+    desc: "Computi metrici, quadri economici e contabilità di cantiere per tenere costi e avanzamento sotto controllo.",
+  },
+  {
+    num: "08",
+    title: "Supporto tecnico continuativo",
+    desc: "Un riferimento tecnico stabile per imprese e proprietà che devono decidere, costruire o regolarizzare nel tempo.",
+  },
 ];
 
-export const WHY = {
-  eyebrow: "Perché Studio Lombardo",
-  title: "Sei buoni motivi",
-  titleItalic: "per affidarti a noi",
-  lead:
-    "Non vendiamo singole prestazioni: garantiamo un percorso. Ecco cosa ci rende il partner tecnico su cui costruire.",
+// 5 — Per chi: il visitatore deve riconoscersi
+export const AUDIENCE = {
+  eyebrow: "Per chi lavoro",
+  title: "Un supporto tecnico per chi deve decidere, costruire o regolarizzare.",
   items: [
     {
-      icon: "compass",
-      title: "Un unico referente",
-      desc: "Una sola regia tecnica dal primo sopralluogo alla consegna. Nessun rimpallo, nessuna dispersione.",
+      title: "Privati",
+      desc: "Per chi deve ristrutturare, modificare un immobile, verificare una situazione edilizia o affrontare una pratica.",
     },
     {
-      icon: "rigor",
-      title: "Zero improvvisazione",
-      desc: "Metodo, tempi certi e quadri economici chiari. Sai sempre dove sei e cosa succede dopo.",
+      title: "Imprese",
+      desc: "Per supporto tecnico in cantiere, rilievo, computazione, gestione documentale e coordinamento operativo.",
     },
     {
-      icon: "badge",
-      title: "Competenza certificata",
-      desc: "Iscrizione all'Albo dei Geometri di Como (n. 2793) e oltre 10 anni tra progettazione, cantiere e catasto.",
+      title: "Amministratori",
+      desc: "Per valutazioni tecniche, interventi su parti comuni e problematiche edilizie nella gestione degli immobili.",
     },
     {
-      icon: "shield",
-      title: "Dialoghiamo noi con la PA",
-      desc: "Pratiche edilizie, enti e catasto: gestiamo noi la burocrazia, tu segui solo le decisioni.",
-    },
-    {
-      icon: "target",
-      title: "Precisione strumentale",
-      desc: "Rilievi con GNSS RTK e Stazione Totale: misure affidabili per confini, frazionamenti e progetto.",
-    },
-    {
-      icon: "growth",
-      title: "Visione da investitore",
-      desc: "Analisi di fattibilità e computi metrici per massimizzare il rendimento di ogni operazione immobiliare.",
+      title: "Proprietà immobiliari",
+      desc: "Per due diligence tecniche, verifiche documentali e supporto nelle decisioni su patrimoni e operazioni.",
     },
   ],
 };
 
-export const PROCESS = {
-  eyebrow: "Come lavoriamo",
-  title: "Un metodo in sei tappe,",
-  titleItalic: "senza sorprese",
-  lead:
-    "Lo stesso percorso ordinato dietro ogni progetto. Trasparente, tracciabile, prevedibile — dalla prima idea alla valorizzazione finale.",
-  steps: [
+// 6 — Profilo: confermare fiducia, senza autocelebrarsi.
+// Studio reale a due: Marco (titolare) + Jessica.
+export const PROFILE = {
+  eyebrow: "Lo studio",
+  name: "Studio Tecnico Lombardo",
+  lead: "Geometri liberi professionisti — gestione tecnica degli interventi edilizi.",
+  paragraphs: [
+    "Ci occupiamo della gestione tecnica degli interventi edilizi con un approccio pratico, documentato e orientato alla corretta esecuzione delle opere.",
+    "Seguiamo privati, imprese e amministratori nella gestione di pratiche, cantieri, rilievi e consulenze tecniche, con attenzione alla chiarezza dei passaggi e alla tutela delle responsabilità.",
+  ],
+  trust: [
+    "Iscrizione all'Albo dei Geometri di Como (n. 2793)",
+    "Esperienza in progettazione e direzione lavori",
+    "Gestione pratiche edilizie e cantieri",
+    "Coordinamento della sicurezza",
+    "Rilievi topografici professionali GNSS/RTK",
+    "Approccio tecnico, documentale e cautelativo",
+  ],
+  people: [
     {
-      num: "01",
-      title: "Sopralluogo & ascolto",
-      desc: "Capiamo obiettivo, vincoli e budget. Una fotografia tecnica precisa dello stato di fatto.",
+      name: "Geom. Marco Lombardo",
+      role: "Titolare · Progettazione, Direzione Lavori e Sicurezza",
+      desc: "Coordina progettazione, direzione lavori, sicurezza e analisi tecniche, con attenzione alla corretta esecuzione e alla documentazione delle decisioni.",
     },
     {
-      num: "02",
-      title: "Fattibilità & strategia",
-      desc: "Verifiche urbanistiche e catastali, quadro economico iniziale. Decidiamo insieme la strada giusta.",
-    },
-    {
-      num: "03",
-      title: "Progetto",
-      desc: "Dal concept al progetto esecutivo completo: funzionale, conforme e pronto a costruire.",
-    },
-    {
-      num: "04",
-      title: "Pratiche & autorizzazioni",
-      desc: "CILA, SCIA, PdC e sanatorie. Gestiamo noi il dialogo con la Pubblica Amministrazione.",
-    },
-    {
-      num: "05",
-      title: "Direzione lavori & sicurezza",
-      desc: "Cantiere supervisionato: qualità esecutiva, rispetto di tempi e costi, coordinamento sicurezza.",
-    },
-    {
-      num: "06",
-      title: "Consegna & valorizzazione",
-      desc: "Fine lavori, agibilità, APE. L'immobile è pronto — e vale di più di quando siamo partiti.",
+      name: "Geom. Jessica Lombardo",
+      role: "Pratiche Edilizie e Catasto",
+      desc: "Segue pratiche edilizie e urbanistiche, aggiornamenti catastali (DOCFA, PREGEO), computi metrici e gestione documentale.",
     },
   ],
 };
 
-export const TARGETS = [
-  { title: "Privati", desc: "La casa dei tuoi sogni, senza pensieri. Ci occupiamo di tutto: dai permessi alla progettazione, fino alla chiusura dei lavori." },
-  { title: "Imprese", desc: "Supporto tecnico costante per i tuoi cantieri. Gestione della sicurezza e contabilità lavori per farti concentrare sul costruire." },
-  { title: "Investitori", desc: "Massimizza il rendimento delle tue operazioni immobiliari con analisi di fattibilità precise e tempi certi." },
+// 7 — Prova / credibilità
+export const STATS = [
+  { value: "150", suffix: "+", label: "Incarichi seguiti" },
+  { value: "10", suffix: "+", label: "Anni tra progetto e cantiere" },
+  { value: "30", suffix: "+", label: "Comuni serviti" },
+  { value: "100", suffix: "%", label: "Approccio documentato" },
 ];
 
-export const TEAM = [
-  {
-    name: "Geom. Marco Lombardo",
-    role: "Progettazione, Gestione & DL",
-    desc: "Dal 2008 in attività professionale, gestisce progettazione, direzione lavori, sicurezza, coordinamento tecnico e analisi operative.",
-    skills: ["Direzione lavori", "Coordinamento tecnico", "Due diligence e analisi tecniche"],
-  },
-  {
-    name: "Geom. Jessica Lombardo",
-    role: "Pratiche Edilizie & Catasto",
-    desc: "In attività dal 2017, segue pratiche edilizie e urbanistiche, aggiornamenti catastali, computi metrici, gestione documentale e rapporti operativi.",
-    skills: ["Pratiche edilizie e urbanistiche", "Catasto (DOCFA, PREGEO)", "Computi e quadri economici"],
-  },
-];
-
-export const APE = {
-  eyebrow: "Energy Upgrade",
-  title: "APE &",
-  titleItalic: "Efficienza",
-  intro:
-    "Non un semplice certificato, ma una strategia di valorizzazione. Analizziamo lo stato di fatto e progettiamo il salto di qualità energetica del tuo immobile.",
-  steps: [
-    { title: "Diagnosi", desc: "Analisi dispersioni e impianti esistenti." },
-    { title: "Legge 10", desc: "Progettazione isolamenti e nuovi impianti." },
-  ],
-  classes: ["G", "F", "E", "D", "C", "B", "A4"],
-  benefits: ["+ Valore", "− Sprechi", "+ Comfort"],
+// 8 — CTA finale: abbassa la barriera (confronto, non acquisto)
+export const FINAL_CTA = {
+  eyebrow: "Parliamone",
+  title: "Hai una situazione edilizia da chiarire?",
+  text:
+    "Descrivi brevemente la situazione: ti aiuterò a capire quali verifiche servono, quali documenti raccogliere e quale percorso tecnico seguire.",
+  cta: { label: "Richiedi una consulenza tecnica", href: "#contatti" },
+  motto: "Prima si verifica. Poi si decide.",
 };
 
 export const CONTACT = {

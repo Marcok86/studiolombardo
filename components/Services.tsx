@@ -1,29 +1,32 @@
-import { SERVICES } from "@/lib/content";
+"use client";
+
+import { SERVICES, SERVICES_INTRO } from "@/lib/content";
 import FadeIn from "./FadeIn";
+import TiltCard from "./TiltCard";
+import SectionGlow from "./SectionGlow";
+import Icon from "./Icon";
 
 export default function Services() {
   return (
-    <section className="section section--soft" id="servizi">
+    <section className="section" id="servizi">
+      <SectionGlow side="right" />
       <div className="container">
-        <FadeIn>
-          <p className="eyebrow">Servizi</p>
-          <h2 className="section-title">
-            Tutto il tecnico, <em>sotto un unico tetto.</em>
-          </h2>
-          <p className="section-lead">
-            Nove competenze integrate per seguire ogni fase: dalla fattibilità
-            al cantiere, fino alla valorizzazione dell&apos;immobile.
-          </p>
+        <FadeIn className="section-head">
+          <p className="eyebrow">{SERVICES_INTRO.eyebrow}</p>
+          <h2 className="display">{SERVICES_INTRO.title}</h2>
+          <p className="lead">{SERVICES_INTRO.lead}</p>
         </FadeIn>
 
-        <div className="services__grid">
+        <div className="cardgrid cardgrid--4">
           {SERVICES.map((s, i) => (
-            <FadeIn as="article" className="service" key={s.title} index={i % 3} y={14}>
-              <div className="service__num">{s.num}</div>
+            <TiltCard key={s.num} index={i % 4} className="glass svc">
+              <div className="svc__top">
+                <span className="svc__num">{s.num}</span>
+                <Icon name="arrowUp" size={18} className="svc__arr" />
+              </div>
               <h3>{s.title}</h3>
               <p>{s.desc}</p>
-              <span className="service__arrow" aria-hidden>→</span>
-            </FadeIn>
+            </TiltCard>
           ))}
         </div>
       </div>

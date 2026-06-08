@@ -1,72 +1,49 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import {
+  useInView,
+  useMotionValue,
+  useSpring,
+  useReducedMotion,
+} from "motion/react";
 import { STATS } from "@/lib/content";
 
-function useCountUp(target: number, run: boolean, duration = 1100) {
-  const [value, setValue] = useState(0);
-  useEffect(() => {
-    if (!run) return;
-    if (typeof window !== "undefined" &&
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setValue(target);
-      return;
-    }
-    let raf = 0;
-    const start = performance.now();
-    const tick = (now: number) => {
-      const t = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - t, 3);
-      setValue(Math.round(eased * target));
-      if (t < 1) raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [run, target, duration]);
-  return value;
-}
+function CountUp({ value, suffix }: { value: string; suffix: string }) {
+  const target = parseInt(value, 10);
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.6 });
+  const reduce = useReducedMotion();
+  const mv = useMotionValue(0);
+  const spring = useSpring(mv, { stiffness: 60, damping: 18, mass: 1 });
+  const [display, setDisplay] = useState(reduce ? value : "0");
 
-function Stat({ value, suffix, label, run }: {
-  value: string; suffix: string; label: string; run: boolean;
-}) {
-  const n = useCountUp(parseInt(value, 10), run);
+  useEffect(() => {
+    if (inView && !reduce) mv.set(target);
+  }, [inView, reduce, target, mv]);
+
+  useEffect(() => {
+    if (reduce) return;
+    return spring.on("change", (v) => setDisplay(String(Math.round(v))));
+  }, [spring, reduce]);
+
   return (
-    <div>
-      <div className="stat__value">{n}{suffix}</div>
-      <div className="stat__label">{label}</div>
-    </div>
+    <span ref={ref} className="stat__v">
+      {display}
+      <b>{suffix}</b>
+    </span>
   );
 }
 
 export default function Stats() {
-  const ref = useRef<HTMLDivElement>(null);
-  const [run, setRun] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setRun(true);
-          io.disconnect();
-        }
-      },
-      { threshold: 0.4 }
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-
   return (
-    <section className="stats section" aria-label="I numeri dello studio">
-      <div className="container">
-        <div className="stats__grid" ref={ref}>
-          {STATS.map((s) => (
-            <Stat key={s.label} {...s} run={run} />
-          ))}
+    <div className="stats">
+      {STATS.map((s) => (
+        <div className="stat" key={s.label}>
+          <CountUp value={s.value} suffix={s.suffix} />
+          <div className="stat__l">{s.label}</div>
         </div>
-      </div>
-    </section>
+      ))}
+    </div>
   );
 }
