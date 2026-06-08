@@ -1,4 +1,6 @@
-import Reveal from "./Reveal";
+"use client";
+
+import FadeIn from "./FadeIn";
 import { TEAM } from "@/lib/content";
 
 function initials(name: string) {
@@ -10,18 +12,32 @@ export default function Team() {
   return (
     <section className="section section--soft">
       <div className="container">
-        <Reveal>
+        <FadeIn>
           <p className="eyebrow">Il team</p>
-          <h2 className="section-title">Il volto dietro lo studio.</h2>
+          <h2 className="section-title">
+            Il volto <em>dietro lo studio.</em>
+          </h2>
           <p className="section-lead">
             Due geometri, competenze complementari, un unico standard di
             affidabilità a fianco dei nostri clienti.
           </p>
-        </Reveal>
+        </FadeIn>
 
         <div className="team__grid">
           {TEAM.map((m, i) => (
-            <Reveal key={m.name} className="member" delay={i * 90}>
+            <FadeIn
+              as="article"
+              key={m.name}
+              className="member"
+              index={i}
+              onMouseMove={(e) => {
+                const el = e.currentTarget;
+                const r = el.getBoundingClientRect();
+                el.style.setProperty("--mx", `${e.clientX - r.left}px`);
+                el.style.setProperty("--my", `${e.clientY - r.top}px`);
+              }}
+            >
+              <span className="member__spot" aria-hidden />
               <div className="member__avatar" aria-hidden>{initials(m.name)}</div>
               <h3>{m.name}</h3>
               <p className="member__role">{m.role}</p>
@@ -31,7 +47,7 @@ export default function Team() {
                   <li key={s}>{s}</li>
                 ))}
               </ul>
-            </Reveal>
+            </FadeIn>
           ))}
         </div>
       </div>

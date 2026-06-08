@@ -1,12 +1,35 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NAV, CONTACT, HERO } from "@/lib/content";
+import MagneticButton from "./MagneticButton";
 
 const primaryPhone = CONTACT.phones[0];
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [active, setActive] = useState<string>("");
+
+  // Scrollspy: evidenzia la voce della sezione correntemente in vista.
+  useEffect(() => {
+    const ids = NAV.map((n) => n.href.replace("#", ""));
+    const sections = ids
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+    if (!sections.length) return;
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible) setActive(`#${visible.target.id}`);
+      },
+      { rootMargin: "-45% 0px -50% 0px", threshold: [0, 0.25, 0.5] }
+    );
+    sections.forEach((s) => io.observe(s));
+    return () => io.disconnect();
+  }, []);
 
   return (
     <header className="nav">
@@ -17,7 +40,11 @@ export default function Navbar() {
 
         <nav className="nav__links">
           {NAV.map((item) => (
-            <a key={item.href} href={item.href}>
+            <a
+              key={item.href}
+              href={item.href}
+              className={active === item.href ? "is-active" : undefined}
+            >
               {item.label}
             </a>
           ))}
@@ -27,9 +54,9 @@ export default function Navbar() {
           <a className="nav__tel" href={primaryPhone.href}>
             <span>☏</span> {primaryPhone.label}
           </a>
-          <a className="btn btn--primary nav__cta" href={HERO.ctaPrimary.href}>
+          <MagneticButton href={HERO.ctaPrimary.href} className="btn btn--primary nav__cta">
             Richiedi consulenza
-          </a>
+          </MagneticButton>
           <button
             className="nav__burger"
             aria-label={open ? "Chiudi menu" : "Apri menu"}

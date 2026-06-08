@@ -1,6 +1,7 @@
 "use client";
 
 import { CONTACT, SITE } from "@/lib/content";
+import FadeIn from "./FadeIn";
 
 export default function Contact() {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -25,12 +26,14 @@ export default function Contact() {
   return (
     <section className="section" id="contatti">
       <div className="container">
-        <p className="eyebrow">Contatti</p>
-        <h2 className="section-title">Raccontaci il tuo progetto.</h2>
-        <p className="section-lead">
-          Rispondiamo in fretta. Scrivici dal form o chiamaci: la prima
-          valutazione è senza impegno.
-        </p>
+        <FadeIn>
+          <p className="eyebrow">Contatti</p>
+          <h2 className="section-title">Raccontaci il tuo progetto.</h2>
+          <p className="section-lead">
+            Rispondiamo in fretta. Scrivici dal form o chiamaci: la prima
+            valutazione è senza impegno.
+          </p>
+        </FadeIn>
 
         <div className="contact__grid" style={{ marginTop: "2.5rem" }}>
           <div className="contact__info">
